@@ -19,7 +19,7 @@ impl IntensitySegments {
         }
         
         if let Some((k, v)) = self.map.range(..=from).next_back(){
-            // handle == 0
+            // handle == front or == back
             self.map.insert(to, *v + amount);
         } else {
             // new value, border
@@ -37,8 +37,30 @@ impl IntensitySegments {
     }
     
     fn set(&mut self, from: i128, to: i128, amount: i128){
-        if amount == 0 { 
-            
+        if amount == 0 {
+            if self.map.range((to + 1)..).next().is_some() {
+                if let Some((k, v)) = self.map.range(..=to).next_back() {
+                    self.map.insert(to, *v);
+                } else {
+                    // no need to insert
+                }
+            } else {
+                // no need to insert
+            }
+
+            if self.map.range((from + 1)..).next().is_some() {
+                if let Some((k, v)) = self.map.range(..from).next_back() {
+                    if *v ==0 { 
+                        // no need to change
+                    } else {
+                        self.map.insert(from, 0);
+                    }
+                } else {
+                    // no need to insert
+                }
+            } else {
+                // no need to insert
+            }
         } else {
             if let Some((k, v)) = self.map.range(..=to).next_back() {
                 self.map.insert(to, *v);

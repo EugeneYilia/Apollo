@@ -38,6 +38,18 @@ impl IntensitySegments {
         for key in keys_to_add {
             self.map.insert(key, self.map.get(&key).unwrap() + amount                                                                          );
         }
+        
+        if let Some((k, v)) = self.map.range(..from).next_back(){
+            if *v == *self.map.get(&from).unwrap() {
+                self.map.remove(&from);
+            }
+        }
+
+        if let Some((k, v)) = self.map.range(..to).next_back(){
+            if *v == *self.map.get(&to).unwrap() {
+                self.map.remove(&to);
+            }
+        }
     }
 
     pub fn set(&mut self, from: i128, to: i128, amount: i128){

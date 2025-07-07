@@ -38,16 +38,8 @@ impl IntensitySegments {
         if *self.map.range(..to).next_back().unwrap().1 == *self.map.get(&to).unwrap() {
             self.map.remove(&to);
         }
-        
-        if let Some((_, v)) = self.map.range(..from).next_back(){
-            if *v == *self.map.get(&from).unwrap() {
-                self.map.remove(&from);
-            }
-        } else {
-            if 0 == *self.map.get(&from).unwrap() {
-                self.map.remove(&from);
-            }
-        }
+
+        self.merge_node(from);
     }
 
     pub fn set(&mut self, from: i128, to: i128, amount: i128){
@@ -71,18 +63,22 @@ impl IntensitySegments {
         if *self.map.get(&from).unwrap() == *self.map.get(&to).unwrap() {
             self.map.remove(&to);
         }
-        
-        if let Some((_, v)) = self.map.range(..from).next_back(){
-            if *v == *self.map.get(&from).unwrap() {
-                self.map.remove(&from);
-            }
-        } else {
-            if 0 == *self.map.get(&from).unwrap() {
-                self.map.remove(&from);
-            }
-        }
+
+        self.merge_node(from);
     }
 
+    fn merge_node(&mut self, index: i128) {
+        if let Some((_, v)) = self.map.range(..index).next_back(){
+            if *v == *self.map.get(&index).unwrap() {
+                self.map.remove(&index);
+            }
+        } else {
+            if 0 == *self.map.get(&index).unwrap() {
+                self.map.remove(&index);
+            }
+        }
+    } 
+    
     pub fn to_string(&self) -> String{
         format!("[{}]", self
             .map

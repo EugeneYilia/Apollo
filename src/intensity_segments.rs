@@ -43,11 +43,19 @@ impl IntensitySegments {
             if *v == *self.map.get(&from).unwrap() {
                 self.map.remove(&from);
             }
+        } else {
+            if 0 == *self.map.get(&from).unwrap() {
+                self.map.remove(&from);
+            }
         }
 
         if let Some((k, v)) = self.map.range(..to).next_back(){
             if *v == *self.map.get(&to).unwrap() {
                 self.map.remove(&to);
+            } else {
+                if 0 == *self.map.get(&to).unwrap() {
+                    self.map.remove(&to);
+                }
             }
         }
     }

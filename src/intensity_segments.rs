@@ -61,46 +61,40 @@ impl IntensitySegments {
     }
 
     pub fn set(&mut self, from: i128, to: i128, amount: i128){
-        if amount == 0 {
-            if self.map.range((to + 1)..).next().is_some() {
-                if let Some((k, v)) = self.map.range(..=to).next_back() {
-                    self.map.insert(to, *v);
-                } else {
-                    // no need to insert
-                }
-            } else {
-                // no need to insert
-            }
+        if let Some((k, v)) = self.map.range(..=to).next_back() {
+            self.map.insert(to, *v);
+        } else {
+            self.map.insert(to, 0);
+        }
 
-            if self.map.range((from + 1)..).next().is_some() {
-                if let Some((k, v)) = self.map.range(..from).next_back() {
-                    if *v ==0 {
-                        // no need to change
-                    } else {
-                        self.map.insert(from, 0);
-                    }
-                } else {
-                    // no need to insert
-                }
-            } else {
-                // no need to insert
+        self.map.insert(from, amount);
+
+        let keys_to_remove: Vec<i128> = self.map
+            .range((from + 1)..to)
+            .map(|(k, _)| *k)
+            .collect();
+
+        for key in keys_to_remove {
+            self.map.remove(&key);
+        }
+
+        if let Some((k, v)) = self.map.range(..from).next_back(){
+            if *v == *self.map.get(&from).unwrap() {
+                self.map.remove(&from);
             }
         } else {
-            if let Some((k, v)) = self.map.range(..=to).next_back() {
-                self.map.insert(to, *v);
-            } else {
-                self.map.insert(to, 0);
+            if 0 == *self.map.get(&from).unwrap() {
+                self.map.remove(&from);
             }
+        }
 
-            self.map.insert(from, amount);
-
-            let keys_to_remove: Vec<i128> = self.map
-                .range((from + 1)..to)
-                .map(|(k, _)| *k)
-                .collect();
-
-            for key in keys_to_remove {
-                self.map.remove(&key);
+        if let Some((k, v)) = self.map.range(..to).next_back(){
+            if *v == *self.map.get(&to).unwrap() {
+                self.map.remove(&to);
+            } else {
+                if 0 == *self.map.get(&to).unwrap() {
+                    self.map.remove(&to);
+                }
             }
         }
     }

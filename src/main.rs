@@ -27,5 +27,5 @@ fn main() {
     assert_eq!(segments.to_string(), "[[5,3],[8,0],[12,5],[15,2],[20,0]]");
 
     segments.set(10, 10, 999);
-    assert_eq!(segments.to_string(), "[[5,3],[8,0],[12,5],[15,2],[20,0]]"); // 不应变化
+    assert_eq!(segments.to_string(), "[[5,3],[8,0],[12,5],[15,2],[20,0]]");
 }

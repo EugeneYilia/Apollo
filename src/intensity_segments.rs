@@ -24,10 +24,10 @@ impl IntensitySegments {
 
         if let Some((k, v)) = self.map.range(..=from).next_back(){
             // handle == front or == back
-            self.map.insert(to, *v + amount);
+            self.map.insert(from, *v + amount);
         } else {
             // new value, border
-            self.map.insert(to, amount);
+            self.map.insert(from, amount);
         }
 
         let keys_to_add: Vec<i128> = self.map

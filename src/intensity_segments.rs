@@ -8,9 +8,13 @@ impl IntensitySegments {
     pub fn new() -> Self {
         IntensitySegments {map: BTreeMap::new()}
     }
-    
+
     pub fn add(&mut self, from: i128, to: i128, amount: i128){
         if amount == 0 {
+            return;
+        }
+        
+        if from > to {
             return;
         }
 
@@ -26,13 +30,15 @@ impl IntensitySegments {
             self.map.insert(from, amount);
         }
 
-        let keys_to_add: Vec<i128> = self.map
-            .range((from + 1)..to)
-            .map(|(k, _)| *k)
-            .collect();
+        if to > from + 1 {
+            let keys_to_add: Vec<i128> = self.map
+                .range((from + 1)..to)
+                .map(|(k, _)| *k)
+                .collect();
 
-        for key in keys_to_add {
-            self.map.insert(key, self.map.get(&key).unwrap() + amount                                                                          );
+            for key in keys_to_add {
+                self.map.insert(key, self.map.get(&key).unwrap() + amount);
+            }
         }
 
         if *self.map.range(..to).next_back().unwrap().1 == *self.map.get(&to).unwrap() {
@@ -43,6 +49,10 @@ impl IntensitySegments {
     }
 
     pub fn set(&mut self, from: i128, to: i128, amount: i128){
+        if from > to {
+            return;
+        }
+        
         if let Some((_, v)) = self.map.range(..=to).next_back() {
             self.map.insert(to, *v);
         } else {
@@ -51,13 +61,15 @@ impl IntensitySegments {
 
         self.map.insert(from, amount);
 
-        let keys_to_remove: Vec<i128> = self.map
-            .range((from + 1)..to)
-            .map(|(k, _)| *k)
-            .collect();
+        if to > from + 1 {
+            let keys_to_remove: Vec<i128> = self.map
+                .range((from + 1)..to)
+                .map(|(k, _)| *k)
+                .collect();
 
-        for key in keys_to_remove {
-            self.map.remove(&key);
+            for key in keys_to_remove {
+                self.map.remove(&key);
+            }
         }
 
         if *self.map.get(&from).unwrap() == *self.map.get(&to).unwrap() {
@@ -77,8 +89,8 @@ impl IntensitySegments {
                 self.map.remove(&index);
             }
         }
-    } 
-    
+    }
+
     pub fn to_string(&self) -> String{
         format!("[{}]", self
             .map

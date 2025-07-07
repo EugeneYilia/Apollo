@@ -1,5 +1,4 @@
 use crate::intensity_segments::IntensitySegments;
-use std::collections::BTreeMap;
 
 mod intensity_segments;
 

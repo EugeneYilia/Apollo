@@ -14,13 +14,13 @@ impl IntensitySegments {
             return;
         }
 
-        if let Some((k, v)) = self.map.range(..=to).next_back(){
+        if let Some((_, v)) = self.map.range(..=to).next_back(){
             self.map.insert(to, *v);
         } else {
             self.map.insert(to, 0);
         }
 
-        if let Some((k, v)) = self.map.range(..=from).next_back(){
+        if let Some((_, v)) = self.map.range(..=from).next_back(){
             self.map.insert(from, *v + amount);
         } else {
             self.map.insert(from, amount);
@@ -43,7 +43,7 @@ impl IntensitySegments {
     }
 
     pub fn set(&mut self, from: i128, to: i128, amount: i128){
-        if let Some((k, v)) = self.map.range(..=to).next_back() {
+        if let Some((_, v)) = self.map.range(..=to).next_back() {
             self.map.insert(to, *v);
         } else {
             self.map.insert(to, 0);

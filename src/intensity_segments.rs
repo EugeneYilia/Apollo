@@ -15,18 +15,14 @@ impl IntensitySegments {
         }
 
         if let Some((k, v)) = self.map.range(..=to).next_back(){
-            // keep 0 -> 0    5 -> 5
             self.map.insert(to, *v);
         } else {
-            // border
             self.map.insert(to, 0);
         }
 
         if let Some((k, v)) = self.map.range(..=from).next_back(){
-            // handle == front or == back
             self.map.insert(from, *v + amount);
         } else {
-            // new value, border
             self.map.insert(from, amount);
         }
 
@@ -38,24 +34,18 @@ impl IntensitySegments {
         for key in keys_to_add {
             self.map.insert(key, self.map.get(&key).unwrap() + amount                                                                          );
         }
+
+        if *self.map.range(..to).next_back().unwrap().1 == *self.map.get(&to).unwrap() {
+            self.map.remove(&to);
+        }
         
-        if let Some((k, v)) = self.map.range(..from).next_back(){
+        if let Some((_, v)) = self.map.range(..from).next_back(){
             if *v == *self.map.get(&from).unwrap() {
                 self.map.remove(&from);
             }
         } else {
             if 0 == *self.map.get(&from).unwrap() {
                 self.map.remove(&from);
-            }
-        }
-
-        if let Some((k, v)) = self.map.range(..to).next_back(){
-            if *v == *self.map.get(&to).unwrap() {
-                self.map.remove(&to);
-            } else {
-                if 0 == *self.map.get(&to).unwrap() {
-                    self.map.remove(&to);
-                }
             }
         }
     }
@@ -78,23 +68,17 @@ impl IntensitySegments {
             self.map.remove(&key);
         }
 
-        if let Some((k, v)) = self.map.range(..from).next_back(){
+        if *self.map.get(&from).unwrap() == *self.map.get(&to).unwrap() {
+            self.map.remove(&to);
+        }
+        
+        if let Some((_, v)) = self.map.range(..from).next_back(){
             if *v == *self.map.get(&from).unwrap() {
                 self.map.remove(&from);
             }
         } else {
             if 0 == *self.map.get(&from).unwrap() {
                 self.map.remove(&from);
-            }
-        }
-
-        if let Some((k, v)) = self.map.range(..to).next_back(){
-            if *v == *self.map.get(&to).unwrap() {
-                self.map.remove(&to);
-            } else {
-                if 0 == *self.map.get(&to).unwrap() {
-                    self.map.remove(&to);
-                }
             }
         }
     }

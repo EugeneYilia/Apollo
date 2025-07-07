@@ -13,7 +13,7 @@ impl IntensitySegments {
         if amount == 0 {
             return;
         }
-        
+
         if from > to {
             return;
         }
@@ -40,10 +40,8 @@ impl IntensitySegments {
                 self.map.insert(key, self.map.get(&key).unwrap() + amount);
             }
         }
-
-        if *self.map.range(..to).next_back().unwrap().1 == *self.map.get(&to).unwrap() {
-            self.map.remove(&to);
-        }
+        
+        self.merge_node(to);
 
         self.merge_node(from);
     }
@@ -52,7 +50,7 @@ impl IntensitySegments {
         if from > to {
             return;
         }
-        
+
         if let Some((_, v)) = self.map.range(..=to).next_back() {
             self.map.insert(to, *v);
         } else {
@@ -72,7 +70,9 @@ impl IntensitySegments {
             }
         }
 
-        if *self.map.get(&from).unwrap() == *self.map.get(&to).unwrap() {
+        if to != from && *self.map.get(&from).unwrap() == *self.map.get(&to).unwrap() {
+            self.map.remove(&to);
+        } else {
             self.map.remove(&to);
         }
 

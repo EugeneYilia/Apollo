@@ -73,7 +73,7 @@ impl IntensitySegments {
         if to != from && *self.map.get(&from).unwrap() == *self.map.get(&to).unwrap() {
             self.map.remove(&to);
         } else {
-            self.map.remove(&to);
+            self.merge_node(to);
         }
 
         self.merge_node(from);

@@ -14,7 +14,7 @@ impl IntensitySegments {
             return;
         }
 
-        if from > to {
+        if from >= to {
             return;
         }
 
@@ -47,7 +47,7 @@ impl IntensitySegments {
     }
 
     pub fn set(&mut self, from: i128, to: i128, amount: i128){
-        if from > to {
+        if from >= to {
             return;
         }
 
@@ -70,10 +70,8 @@ impl IntensitySegments {
             }
         }
 
-        if to != from && *self.map.get(&from).unwrap() == *self.map.get(&to).unwrap() {
+        if *self.map.get(&from).unwrap() == *self.map.get(&to).unwrap() {
             self.map.remove(&to);
-        } else {
-            self.merge_node(to);
         }
 
         self.merge_node(from);
